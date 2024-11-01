@@ -1,41 +1,41 @@
-import java.text.ParseException;
 import java.util.*;
 
 public class Menu {
-    private HashMap<String, ArrayList<Food>> menu;
+    private HashMap<String, ArrayList<Food>> menu_list;
+    private static Menu instance;
     Scanner s;
-    public Menu(){
-        menu = new HashMap<>();
+    private Menu(){
+        menu_list = new HashMap<>();
         s = new Scanner(System.in);
     }
+
+    public static Menu getInstance(){
+        if(instance == null) instance = new Menu();
+        return instance;
+    }
     public Set<String> get_categories(){ // print categories when using add items to menu
-        return menu.keySet();
+        return menu_list.keySet();
     }
 
-    public void add_menu(String category, String name, int price){
-        menu.putIfAbsent(category, new ArrayList<Food>());
-        menu.get(category).add(new Food(name, category, price));
+    public void add(String category, String name, int price){
+        menu_list.putIfAbsent(category, new ArrayList<Food>());
+        menu_list.get(category).add(new Food(name, category, price));
     }
 
-    public void remove_menu(String category, String name){ //category and name is valid(make sure)
-        Food temp = null;
-
-        for(Food j: menu.get(category)){
+    //dont forget to cancel pending orders once this happens and print them out
+    public void remove(String category, String name){ //category and name is valid(make sure)
+        for(Food j: menu_list.get(category)){
             if(Objects.equals(j.name, name)){
-                temp = j;
+                j.available = false;
                 break;
             }
-        }
-        menu.get(category).remove(temp);
-        if(menu.get(category).isEmpty()){
-            menu.remove(category);
         }
     }
 
     // returns true if update successful
-    public boolean update_menu(String category, String name, int action){ //category and name is valid(make sure)
+    public boolean update(String category, String name, int action){ //category and name is valid(make sure)
         boolean done = true;
-        for(Food j: menu.get(category)){
+        for(Food j: menu_list.get(category)){
             if(Objects.equals(j.name, name)){
                 // action = 1 is name, 2 is price, 3 is availability
                 if(action == 1){
@@ -73,19 +73,27 @@ public class Menu {
         return done;
     }
 
-    public void view_menu(){
-        for(String i: menu.keySet()){
+    public void view_customer(){ // will only print available dishes
+        for(String i: menu_list.keySet()){
             System.out.printf("%s:\n", i.toUpperCase());
-            for(Food j: menu.get(i)){
+            for(Food j: menu_list.get(i)){
+                if(j.available) System.out.println(j);
+            }
+        }
+    }
+    public void view_admin(){ //will bring non-available dishes to make available later on if admin wishes
+        for(String i: menu_list.keySet()){
+            System.out.printf("%s:\n", i.toUpperCase());
+            for(Food j: menu_list.get(i)){
                 System.out.println(j);
             }
         }
     }
 
-    public void view_menu(String category){
-        if(menu.containsKey(category)){
+    public void view_cat_customer(String category){
+        if(menu_list.containsKey(category)){
             System.out.println(category.toUpperCase() + ":");
-            for(Food j: menu.get(category)){
+            for(Food j: menu_list.get(category)){
                 System.out.println(j);
             }
         }
@@ -94,18 +102,18 @@ public class Menu {
         }
     }
 
-    public void view_menu_key(String keyword){
-        for(String i: menu.keySet()){
+    public void view_key_customer(String keyword){
+        for(String i: menu_list.keySet()){
             System.out.printf("%s:\n", i.toUpperCase());
-            for(Food j: menu.get(i)){
+            for(Food j: menu_list.get(i)){
                 if(j.name.contains(keyword)) System.out.println(j);
             }
         }
     }
 
-    public void view_menu_sortByPrice(){
+    public void view_sortByPrice_customer(){
         ArrayList<Food> temp = new ArrayList<>();
-        for(ArrayList<Food> f: menu.values()){
+        for(ArrayList<Food> f: menu_list.values()){
             temp.addAll(f);
         }
         FoodComparator f = new FoodComparator();

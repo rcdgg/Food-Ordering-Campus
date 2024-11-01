@@ -2,29 +2,33 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class User {
+    static Scanner s;
     protected static Backend backend;
+    protected static Menu menu;
     public User(){
-        backend = new Backend();
+        s = new Scanner(System.in);
+        backend = Backend.getInstance();
+        menu = Menu.getInstance();
     }
-    public ArrayList<String> login(Scanner scanner){
+    public static ArrayList<String> login(){
         String username; String pass;
         ArrayList<String> cred = new ArrayList<>();
         System.out.println("Username: ");
-        username = scanner.nextLine().strip();
+        username = s.nextLine().strip();
         System.out.println("Password: ");
-        pass = scanner.nextLine().strip();
+        pass = s.nextLine().strip();
         cred.add(username); cred.add(pass);
 
         return cred;
     }
-    public ArrayList<String> signup(Scanner scanner){
+    public static ArrayList<String> signup(){
         String username; String pass;
         ArrayList<String> cred = new ArrayList<>();
         System.out.println("---");
         System.out.println("Choose Username: ");
-        username = scanner.nextLine().strip();
+        username = s.nextLine().strip();
         System.out.println("Choose Password: ");
-        pass = scanner.nextLine().strip();
+        pass = s.nextLine().strip();
         cred.add(username); cred.add(pass);
         System.out.println("---");
         return cred;

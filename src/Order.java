@@ -3,19 +3,31 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Scanner;
 
-public class Order {
+public class Order implements Comparable<Order>{
+    Scanner s;
     public int status; // 0 = pending, 1 = preparing, 2 = out for delivery, 3 = delivered, -1 = cancelled, -2 = refunded
+    public static HashMap<Integer, String> status_dict;
     public String requests;
     public int total;
     public HashMap<Food, Integer> items;
-    Scanner s;
     public int id;
-    public Order(int id){
+    public String name;
+    public boolean vip;
+    public Order(int id, String name, boolean vip){
+        this.name = name;
         status = 0;
         total = 0;
         items = new HashMap<>();
         s = new Scanner(System.in);
         this.id = id;
+        this.vip = vip;
+        status_dict = new HashMap<>();
+        status_dict.put(-1, "Cancelled");
+        status_dict.put(-2, "Refunded");
+        status_dict.put(0, "Pending");
+        status_dict.put(1, "Preparing");
+        status_dict.put(2, "Out for delivery");
+        status_dict.put(3, "Delivered");
     }
 
     public void modify_item(Food food, int count){ // -ve count means removing items
@@ -39,6 +51,10 @@ public class Order {
         }
     }
 
+    public void add_requests(String s){
+        requests = s;
+    }
+
     public void cancel_order(){
         if(status == 0) { // order wasnt placed
             System.out.println("Order has been cancelled!");
@@ -53,10 +69,14 @@ public class Order {
         status = -1;
     }
 
-    public void view_order(){
+    // returns true when order is valid
+    public boolean billing(){
         total = 0;
         boolean done = true;
+        if(status < 0) done = false;
         ArrayList<String> bill = new ArrayList<>();
+        System.out.println("Order ID: #" + id);
+        System.out.printf("Status: %s\n", status_dict.get(status));
         for(Food i: items.keySet()){
                 total += i.price * items.get(i);
                 bill.add(String.format("%s (%d rs.)      x%d\n", i.name, i.price, items.get(i)));
@@ -64,36 +84,25 @@ public class Order {
                 done = false;
             }
         }
-        if(done){
-            System.out.println("--------");
-            for(String s: bill) System.out.println(s);
-            System.out.println("Bill: " + total);
-            System.out.println("--------");
-        } else {
-            cancel_order();
-        }
+        System.out.println("--------");
+        for(String s: bill) System.out.println(s);
+        System.out.println("Bill: " + total);
+        System.out.println("--------");
+        return done;
+    }
+
+    public void view_order(){
+        billing();
     }
 
     // if true returned, proceed with checkout
     //also call in case of view status
     public boolean checkout(){
-        if(status == -1){
-            System.out.println("Order has been cancelled(will be refunded shortly)");
-        }
-        else if(status == -2){
-            System.out.println("Order has been refunded.");
-        }
-        else if(status == 1){
-            System.out.println("Preparing your order!");
-        }
-        else if(status == 2){
-            System.out.println("Out for delivery!");
-        }
-        else if(status == 3){
-            System.out.println("Order already delivered!");
-        }
-        else{
-            view_order();
+        System.out.printf("Order status: %s\n", status_dict.get(status));
+        if(status == 0){
+            if(!billing()){
+                cancel_order();
+            }
             if(status == 0){
                 System.out.print("Proceed with checkout? (y/n): ");
                 String ans = s.nextLine().toLowerCase().strip();
@@ -107,4 +116,8 @@ public class Order {
     }
 
 
+    @Override
+    public int compareTo(Order o) {
+        return o.id - this.id;
+    }
 }

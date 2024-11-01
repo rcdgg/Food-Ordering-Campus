@@ -15,7 +15,7 @@ public class Food{
     }
     @Override
     public String toString(){
-        return String.format("%s " + (available?"(available)":"(not available)") + " Price: %d\n", name, price);
+        return String.format("%s        %drs\n", name, price);
     }
 
 }
