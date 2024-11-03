@@ -41,6 +41,6 @@ class FoodComparator implements Comparator<Food>{
 
     @Override
     public int compare(Food o1, Food o2) {
-        return o2.price - o1.price;
+        return -(o2.price - o1.price);
     }
 }

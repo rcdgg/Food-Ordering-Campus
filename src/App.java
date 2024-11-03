@@ -10,7 +10,7 @@ public class App {
         while(true) run();
     }
     private static void run(){
-        System.out.println("=======Welcome to Tomazo=========");
+        System.out.println("=======Welcome to Byte Me!=========");
         while(true){
             System.out.println("Login as:\n1. Admin\n2. Customer\n3. Exit");
             String act;
