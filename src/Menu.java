@@ -17,8 +17,25 @@ public class Menu {
         return menu_list.keySet();
     }
 
+    public ArrayList<Food> get_food_items(String cat){
+        return menu_list.get(cat);
+    }
+
+    public boolean verify_item(String cat, String item){
+        if(menu_list.containsKey(cat)){
+            for(Food f: menu_list.get(cat)){
+                if(f.name.equals(item)) return true;
+            }
+        }
+        return false;
+    }
+
+    // MAKE SURE CATEGORY, NAME ARE IN LOWER CASE AND STRIPPED
     public void add(String category, String name, int price){
         menu_list.putIfAbsent(category, new ArrayList<Food>());
+        for(Food f: menu_list.get(category)){
+            if(Objects.equals(f.name, name)) return; // in case the item already exists
+        }
         menu_list.get(category).add(new Food(name, category, price));
     }
 
@@ -39,12 +56,14 @@ public class Menu {
             if(Objects.equals(j.name, name)){
                 // action = 1 is name, 2 is price, 3 is availability
                 if(action == 1){
+                    System.out.print("Enter new name: ");
                     j.name = s.nextLine();
                     System.out.println("name updated to " + j.name);
                 }
-                if(action == 2){
+                else if(action == 2){
                     int pr;
                     while(true){
+                        System.out.print("Enter new price: ");
                         try {
                             pr = Integer.parseInt(s.nextLine());
                             break;
@@ -54,13 +73,16 @@ public class Menu {
                     }
                     j.price = pr;
                 }
-                if(action == 3){
+                else if(action == 3){
                     System.out.println(j);
                     System.out.print("change availability? (y/n): ");
                     String t = s.nextLine().strip().toLowerCase();
                     if(t.equals("y") || t.equals("yes")){
                         j.available = !j.available;
                         System.out.println("changed...");
+                    }
+                    if(!j.available){
+                        j.order_invalid();
                     }
                 }
                 else {
@@ -75,7 +97,7 @@ public class Menu {
 
     public void view_customer(){ // will only print available dishes
         for(String i: menu_list.keySet()){
-            System.out.printf("%s:\n", i.toUpperCase());
+            System.out.printf("# %s:\n", i.toUpperCase());
             for(Food j: menu_list.get(i)){
                 if(j.available) System.out.println(j);
             }
@@ -83,7 +105,7 @@ public class Menu {
     }
     public void view_admin(){ //will bring non-available dishes to make available later on if admin wishes
         for(String i: menu_list.keySet()){
-            System.out.printf("%s:\n", i.toUpperCase());
+            System.out.printf("# %s:\n", i.toUpperCase());
             for(Food j: menu_list.get(i)){
                 System.out.println(j);
             }
@@ -104,7 +126,7 @@ public class Menu {
 
     public void view_key_customer(String keyword){
         for(String i: menu_list.keySet()){
-            System.out.printf("%s:\n", i.toUpperCase());
+            System.out.printf("# %s:\n", i.toUpperCase());
             for(Food j: menu_list.get(i)){
                 if(j.name.contains(keyword)) System.out.println(j);
             }

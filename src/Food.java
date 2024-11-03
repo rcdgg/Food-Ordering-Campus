@@ -1,21 +1,37 @@
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.*;
 
 public class Food{
     public String category, name;
     public int price;
     public boolean available;
-    public ArrayList<String> reviews;
+    public HashMap<String, String> reviews; //customer user maps to their review of this food object
+    public Set<Order> order_list;
     public Food(String name, String category, int price){
-        name = this.name;
-        category = this.category;
-        price = this.price;
-        reviews = new ArrayList<>();
-        available = true;
+        this.name = name;
+        this.category = category;
+        this.price = price;
+        reviews = new HashMap<>();
+        order_list = new HashSet<>();
+        available = true; // item available by default
+    }
+
+    public void order_invalid(){
+        for(Order o: order_list){
+            o.cancel_order_admin();
+        }
+    }
+
+    public void add_review(String ID, String review){
+        reviews.put(ID, review);
+    }
+
+    public String get_review(String ID){
+        return reviews.get(ID);
     }
     @Override
     public String toString(){
-        return String.format("%s        %drs\n", name, price);
+        if(available) return String.format("%s        %drs\n", name, price);
+        else return String.format("%s        %drs (unavailable)\n", name, price); //for the admin
     }
 
 }

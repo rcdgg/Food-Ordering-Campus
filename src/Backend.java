@@ -1,19 +1,17 @@
 import javax.swing.plaf.IconUIResource;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class Backend {
     protected static ArrayList<Customer> customer_list;
-    protected static PriorityQueue<Order> order_list;
+    protected static ProcessQueue order_list;
     protected static int reg_id, vip_id;
     private static Backend instance;
 
     private Backend(){
         customer_list = new ArrayList<>();
-        order_list = new PriorityQueue<>();
+        order_list = new ProcessQueue();
         reg_id = 0;
-        vip_id = -10000;
+        vip_id = 0;
     }
 
     public static Backend getInstance(){
@@ -30,7 +28,16 @@ public class Backend {
         customer_list.add(new Customer(cred));
     }
 
-    public void add_order(Order o){ //status = 0 is vip, = 1 is normal
+    public void add_order(Order o){
         order_list.add(o);
     }
+
+    public Order poll_order(){
+        return order_list.poll();
+    }
+
+    public void view_order_queue(){
+        order_list.print();
+    }
 }
+
