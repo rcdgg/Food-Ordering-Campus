@@ -24,13 +24,11 @@ public class User {
     public static ArrayList<String> signup(){
         String username; String pass;
         ArrayList<String> cred = new ArrayList<>();
-        System.out.println("---");
         System.out.println("Choose Username: ");
         username = s.nextLine().strip();
         System.out.println("Choose Password: ");
         pass = s.nextLine().strip();
         cred.add(username); cred.add(pass);
-        System.out.println("---");
         return cred;
     }
 }

@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Menu {
-    private HashMap<String, ArrayList<Food>> menu_list;
+    private final HashMap<String, ArrayList<Food>> menu_list;
     private static Menu instance;
     Scanner s;
     private Menu(){
@@ -32,21 +32,11 @@ public class Menu {
 
     // MAKE SURE CATEGORY, NAME ARE IN LOWER CASE AND STRIPPED
     public void add(String category, String name, int price){
-        menu_list.putIfAbsent(category, new ArrayList<Food>());
+        menu_list.putIfAbsent(category, new ArrayList<>());
         for(Food f: menu_list.get(category)){
             if(Objects.equals(f.name, name)) return; // in case the item already exists
         }
         menu_list.get(category).add(new Food(name, category, price));
-    }
-
-    //dont forget to cancel pending orders once this happens and print them out
-    public void remove(String category, String name){ //category and name is valid(make sure)
-        for(Food j: menu_list.get(category)){
-            if(Objects.equals(j.name, name)){
-                j.available = false;
-                break;
-            }
-        }
     }
 
     // returns true if update successful
@@ -75,6 +65,7 @@ public class Menu {
                 }
                 else if(action == 3){
                     System.out.println(j);
+                    // if unavailable, it will be explicitly written otherwise nothing written
                     System.out.print("change availability? (y/n): ");
                     String t = s.nextLine().strip().toLowerCase();
                     if(t.equals("y") || t.equals("yes")){

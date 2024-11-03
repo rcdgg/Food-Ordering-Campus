@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -6,9 +5,9 @@ import java.util.Set;
 public class Customer extends User{
     protected String user, pass;
     private boolean order_details_saved;
-    private ArrayList<Order> order_list;
-    private LinkedHashSet<Food> food_list;
-    private Order curr_order;
+    private final ArrayList<Order> order_list;
+    private final LinkedHashSet<Food> food_list;
+    public Order curr_order;
     public boolean vip;
     public Customer(ArrayList<String> cred){
         super();
@@ -27,6 +26,10 @@ public class Customer extends User{
             System.out.println("You are VIP now!");
         }
         else System.out.println("Already a VIP!");
+    }
+
+    public boolean able_to_checkout(){ // true if i can checkout
+        return curr_order != null;
     }
 
     public void view_menu(){
@@ -183,17 +186,25 @@ public class Customer extends User{
         curr_order = null;
     }
 
-    public void order_status(){
+    public void order_status_all(){
         for (Order o: order_list){
-            System.out.printf("Order ID: %d | ", o.id);
-            o.view_status();
+            System.out.println(o);
+        }
+    }
+
+    public void order_status(){
+        if(able_to_checkout()){
+            System.out.println(curr_order);
+            curr_order.view_order();
+        } else {
+            System.out.println("Create an order first!");
         }
     }
 
     public void cancel_order(){
         //print all orders which have +ve status + not already delivered
         for(Order o: order_list){
-            if(o.status >= 0 && o.status != 3){
+            if(o.status >= 0 && o.status != 3){ // can cancel all orders which havent been delivered or cancelled already
                 o.view_order();
             }
         }
@@ -219,6 +230,7 @@ public class Customer extends User{
             else System.out.println("Enter a valid ID!");
         }
         t.cancel_order();
+        if(t == curr_order) curr_order = null;
     }
 
     public void order_history(){
@@ -228,13 +240,13 @@ public class Customer extends User{
     }
 
     public void create_order(){
-        if(curr_order != null){ // make curr_order null after checkout
+        if(able_to_checkout()){ // make curr_order null after checkout
             System.out.printf("You already have a pending order! (Order ID: %d)\n", curr_order.id);
             System.out.print("Do you wish to discard this order to create a new one? (y/n): ");
             String ans = s.nextLine().strip().toLowerCase();
             if(!(ans.equals("n") || ans.equals("no"))) return;
         }
-        Order o = new Order(backend.get_id(vip), user, vip);
+        Order o = new Order(backend.get_id(vip), user, vip, this);
         curr_order = o;
         order_list.add(o);
         backend.add_order(o);

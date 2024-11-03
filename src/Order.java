@@ -10,7 +10,8 @@ public class Order implements Comparable<Order>{
     public int id;
     public String name;
     public boolean vip, valid;
-    public Order(int id, String name, boolean vip){
+    public Customer cust;
+    public Order(int id, String name, boolean vip, Customer cust){
         this.name = name;
         status = 0;
         total = 0;
@@ -18,9 +19,10 @@ public class Order implements Comparable<Order>{
         s = new Scanner(System.in);
         this.id = id;
         this.vip = vip;
+        this.cust = cust;
         valid = true;
         status_dict = new HashMap<>();
-        status_dict.put(-1, "Cancelled");
+        status_dict.put(-1, "Cancelled (Refund in process)");
         status_dict.put(-2, "Refunded");
         status_dict.put(0, "Pending");
         status_dict.put(1, "Preparing");
@@ -131,11 +133,9 @@ public class Order implements Comparable<Order>{
             if(status == 0){
                 System.out.print("Proceed with checkout? (y/n): ");
                 String ans = s.nextLine().toLowerCase().strip();
-                if(ans.equals("y") || ans.equals("yes")){
-//                    status = 1;
-                    // status will be updated by admin from pending to delivered
-                    return true;
-                }
+                // status = 1;
+                // status will be updated by admin from pending to delivered
+                return ans.equals("y") || ans.equals("yes");
             }
         }
         return false;

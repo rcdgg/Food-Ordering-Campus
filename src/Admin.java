@@ -9,6 +9,10 @@ public class Admin extends User{
         completed_orders = new HashSet<>();
     }
 
+    public void view_menu(){
+        menu.view_admin();
+    }
+
     public void add_menu(){
         menu.view_admin();
         System.out.print("Category: ");
@@ -71,6 +75,8 @@ public class Admin extends User{
                 String ss = s.nextLine().strip().toLowerCase();
                 if(ss.equals("y") || ss.equals("yes")){
                     o.status = 3;
+                    System.out.println(o);
+                    if(o.cust.curr_order == o) o.cust.curr_order = null;
                 }
             }
             case 0 -> {
@@ -90,15 +96,17 @@ public class Admin extends User{
                     }
                     break;
                 }
-                if(!(o.status == 3)) backend.add_order(o);
+                if(o.status != 3) backend.add_order(o);
+                if(o.status == -1) o.cancel_order_admin();
                 else completed_orders.add(o);
+                if(o.cust.curr_order == o) o.cust.curr_order = null;
             }
             case -1 -> {
                 System.out.print("Do you want to process the refund? (y/n): ");
                 String ss = s.nextLine().strip().toLowerCase();
                 if(ss.equals("y") || ss.equals("yes")){
                     o.status = -2;
-                    completed_orders.add(o);
+                    if(o.cust.curr_order == o) o.cust.curr_order = null;
                 }
             }
         }
@@ -112,5 +120,17 @@ public class Admin extends User{
             else tot -= o.total;
         }
         System.out.println("Today's income: " + tot);
+    }
+
+    public Customer fetch_cust(ArrayList<String> cred) throws InvalidLoginException{
+        for(Customer c: Backend.customer_list){
+            if(c.user.equals(cred.get(0)) && c.pass.equals(cred.get(1))) return c;
+        }
+        throw new InvalidLoginException("Invalid login credentials!");
+    }
+
+    public Customer add_cust(ArrayList<String> cred) throws InvalidLoginException{
+        backend.add_customer(cred);
+        return fetch_cust(cred);
     }
 }
