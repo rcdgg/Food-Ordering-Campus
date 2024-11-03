@@ -25,9 +25,10 @@ public class Order implements Comparable<Order>{
         status_dict.put(-1, "Cancelled (Refund in process)");
         status_dict.put(-2, "Refunded");
         status_dict.put(0, "Pending");
-        status_dict.put(1, "Preparing");
-        status_dict.put(2, "Out for delivery");
-        status_dict.put(3, "Delivered");
+        status_dict.put(1, "Waiting for confirmation");
+        status_dict.put(2, "Preparing");
+        status_dict.put(3, "Out for delivery");
+        status_dict.put(4, "Delivered");
     }
 
     public void modify_item(Food food){
@@ -85,7 +86,7 @@ public class Order implements Comparable<Order>{
     }
 
     public void cancel_order_admin(){
-        if(status == 0) { // order wasnt placed
+        if(status == 1) { // order wasnt placed
             System.out.printf("Order(ID: %d) has been cancelled!\n", this.id);
             status = -1;
         }
@@ -109,7 +110,7 @@ public class Order implements Comparable<Order>{
         }
         System.out.println("--------");
         for(String s: bill) System.out.println(s);
-        System.out.println("Bill: " + total);
+        System.out.println("Bill: " + total + "rs");
         System.out.println("--------");
     }
 
@@ -118,7 +119,7 @@ public class Order implements Comparable<Order>{
     }
 
     public String view_status(){
-        return String.format("Order status: %s\n", status_dict.get(status));
+        return String.format("Order status: %s", status_dict.get(status));
     }
 
     // if true returned, proceed with checkout
@@ -143,11 +144,12 @@ public class Order implements Comparable<Order>{
 
     @Override
     public int compareTo(Order o) {
-        return o.id - this.id;
+        return -(o.id - this.id);
     }
 
     @Override
     public String toString(){
+        if(vip) return String.format("(VIP) Order ID: %d | %s | Special requests: %s", id, view_status(), requests);
         return String.format("Order ID: %d | %s | Special requests: %s", id, view_status(), requests);
     }
 }

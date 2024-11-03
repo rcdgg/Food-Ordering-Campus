@@ -24,6 +24,14 @@ public class Customer extends User{
         if(!vip) {
             vip = true;
             System.out.println("You are VIP now!");
+            for(Order o: order_list){
+                if(o.status != 4){
+                    //this will move the order into the vipQueue
+                    backend.remove_order(o);
+                    o.vip = true;
+                    backend.add_order(o);
+                }
+            }
         }
         else System.out.println("Already a VIP!");
     }
@@ -43,8 +51,8 @@ public class Customer extends User{
     public void view_cat_menu(){
         Set<String> temp = menu.get_categories();
         System.out.println("All categories:");
-        for(String cat: temp) System.out.print(cat + " ");
-        System.out.print("Choose a category for the filter");
+        System.out.println(temp);
+        System.out.print("Choose a category for the filter:");
         String category = s.nextLine();
         menu.view_cat_customer(category);
     }
@@ -57,8 +65,8 @@ public class Customer extends User{
         view_menu();
         Set<String> temp = menu.get_categories();
         System.out.println("All categories:");
-        for(String cat: temp) System.out.print(cat + " ");
-        System.out.print("Choose a category for the filter");
+        System.out.println(temp);
+        System.out.print("Choose a category for the filter: ");
         String category = s.nextLine().strip().toLowerCase();
         if(!(temp.contains(category))){
             // i dont keep retrying here until i get the right category because this gives a way to escape this function
@@ -152,6 +160,10 @@ public class Customer extends User{
             System.out.println("You haven't started an order yet!");
             return;
         }
+        if(curr_order.items.isEmpty()){
+            System.out.println("Add items to the order first!");
+            return;
+        }
         boolean cont = curr_order.checkout();
         if(!cont){
             System.out.println("You can't checkout!");
@@ -183,7 +195,7 @@ public class Customer extends User{
             curr_order.add_requests(r);
         }
         System.out.printf("Order placed! (Order ID: %d)\n", curr_order.id);
-        curr_order = null;
+        curr_order.status = 1;
     }
 
     public void order_status_all(){
@@ -208,10 +220,10 @@ public class Customer extends User{
                 o.view_order();
             }
         }
-        int id;
+        int id = -1;
         Order t = null;
         while(true){
-            System.out.println("Choose an order to cancel by ID");
+            System.out.println("Choose an order to cancel by ID (-1 to exit)");
             boolean done = false;
             try{
                 String ss = s.nextLine();
@@ -226,11 +238,11 @@ public class Customer extends User{
             } catch (NumberFormatException e){
                 System.out.println("Enter a valid ID!");
             }
-            if(done) break;
+            if(done || id == -1) break;
             else System.out.println("Enter a valid ID!");
         }
+        if(id == -1) return;
         t.cancel_order();
-        if(t == curr_order) curr_order = null;
     }
 
     public void order_history(){
@@ -240,21 +252,26 @@ public class Customer extends User{
     }
 
     public void create_order(){
-        if(able_to_checkout()){ // make curr_order null after checkout
+        if(able_to_checkout() && curr_order.status == 0){ // make curr_order null after checkout
             System.out.printf("You already have a pending order! (Order ID: %d)\n", curr_order.id);
             System.out.print("Do you wish to discard this order to create a new one? (y/n): ");
             String ans = s.nextLine().strip().toLowerCase();
-            if(!(ans.equals("n") || ans.equals("no"))) return;
+            if((ans.equals("n") || ans.equals("no"))) return;
+            else{
+                order_list.remove(curr_order);
+                backend.remove_order(curr_order);
+            }
         }
-        Order o = new Order(backend.get_id(vip), user, vip, this);
+        Order o = new Order(backend.get_id(), user, vip, this);
         curr_order = o;
         order_list.add(o);
         backend.add_order(o);
+        System.out.println(o);
     }
 
     public void view_reviews(){
         for(Food f: food_list){
-            System.out.println(f.name + " " + f.get_review(user));
+            System.out.println(f.name + ": " + f.get_review(user));
         }
     }
 
@@ -264,8 +281,9 @@ public class Customer extends User{
             System.out.println("Buy items first to review them!");
             return;
         }
+        System.out.println("Choose an item to review");
         for(Food f: food_list){
-            System.out.printf("%d. " + f, ind++);
+            System.out.printf("%d. " + f + "\n", ind++);
         }
         while(true){
             try {

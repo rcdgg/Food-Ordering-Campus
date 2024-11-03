@@ -26,12 +26,13 @@ public class Food{
     }
 
     public String get_review(String ID){
+        if(reviews.get(ID) == null) return "None";
         return reviews.get(ID);
     }
     @Override
     public String toString(){
-        if(available) return String.format("%s        %drs\n", name, price);
-        else return String.format("%s        %drs (unavailable)\n", name, price); //for the admin
+        if(available) return String.format("%s        %drs", name, price);
+        else return String.format("%s        %drs (unavailable)", name, price); //for the admin
     }
 
 }

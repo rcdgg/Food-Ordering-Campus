@@ -1,17 +1,15 @@
-import javax.swing.plaf.IconUIResource;
 import java.util.*;
 
 public class Backend {
     protected static ArrayList<Customer> customer_list;
     protected static ProcessQueue order_list;
-    protected static int reg_id, vip_id;
+    protected static int order_id;
     private static Backend instance;
 
     private Backend(){
         customer_list = new ArrayList<>();
         order_list = new ProcessQueue();
-        reg_id = 0;
-        vip_id = 0;
+        order_id = 0;
     }
 
     public static Backend getInstance(){
@@ -19,9 +17,8 @@ public class Backend {
         return instance;
     }
 
-    public int get_id(boolean vip){
-        if(vip) return vip_id++;
-        else return reg_id++;
+    public int get_id(){
+        return order_id++;
     }
 
     public void add_customer(ArrayList<String> cred){
@@ -30,6 +27,10 @@ public class Backend {
 
     public void add_order(Order o){
         order_list.add(o);
+    }
+
+    public void remove_order(Order o){
+        order_list.remove(o);
     }
 
     public Order poll_order(){

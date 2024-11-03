@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class App {
@@ -8,6 +6,7 @@ public class App {
     private static final Admin admin = new Admin();
     private static Customer customer = null;
     public static void main(String[] args) {
+
         while(true) run();
     }
     private static void run(){
@@ -18,17 +17,16 @@ public class App {
             int action;
             while(true) {
                 try {
-                    act = s.nextLine().strip();
+                    act = s.nextLine();
                     action = Integer.parseInt(act);
                     break;
                 } catch (Exception e) {
                     System.out.println("Enter a number!");
                 }
             }
-            s.nextLine();
             if(action == 3){
                 System.out.println("Exiting...");
-                System.out.println("=====================================\n");
+                System.out.println("==================================\n");
                 s.close();
                 System.exit(0);
             }
@@ -59,7 +57,6 @@ public class App {
                         System.out.println("Enter a number!");
                     }
                 }
-                s.nextLine();
                 if(action == 1){
                     while(true){
                         cred = User.login();
@@ -86,11 +83,12 @@ public class App {
     }
 
     private static void run_cust(){
+        OUT:
         while(true){
             System.out.printf("===========Welcome, %s============\n", customer.user);
             if(customer.vip) System.out.println("(VIP)");
             System.out.println("Choose Action: ");
-            System.out.println("1. Browse menu:\n2. Create new order:\n3. Modify order:\n4. Track/cancel order:\n5. Checkout\n6. Become VIP\n7.Item reviews\n8. Exit");
+            System.out.println("1. Browse menu\n2. Create new order\n3. Modify order\n4. Track/cancel order\n5. Checkout\n6. Become VIP\n7. Item reviews\n8. Exit");
             int action;
             while(true) {
                 try {
@@ -149,6 +147,7 @@ public class App {
                 case 3 -> {
                     System.out.println("---------");
                     customer.order_status();
+                    if(!customer.able_to_checkout()) break;
                     System.out.println("1. Add items\n2. Modify quantities\n3. Remove items\n4. View total amount\n5. Exit");
                     while(true) {
                         try {
@@ -263,12 +262,14 @@ public class App {
                 }
                 case 8 -> {
                     System.out.println("Logging out...");
+                    break OUT;
                 }
                 default -> System.out.println("Enter correct number!");
             }
         }
     }
     private static void run_admin(){
+        OUT:
         while(true){
             System.out.print("===========Welcome, Admin============\n");
             System.out.println("Choose Action: ");
@@ -358,7 +359,10 @@ public class App {
 
                     System.out.println("---------");
                 }
-                case 4 -> System.out.println("Logging out...");
+                case 4 -> {
+                    System.out.println("Logging out...");
+                    break OUT;
+                }
 
                 default -> System.out.println("Enter correct number!");
             }

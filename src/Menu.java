@@ -92,6 +92,7 @@ public class Menu {
             for(Food j: menu_list.get(i)){
                 if(j.available) System.out.println(j);
             }
+            System.out.println();
         }
     }
     public void view_admin(){ //will bring non-available dishes to make available later on if admin wishes
@@ -100,6 +101,7 @@ public class Menu {
             for(Food j: menu_list.get(i)){
                 System.out.println(j);
             }
+            System.out.println();
         }
     }
 
@@ -109,6 +111,7 @@ public class Menu {
             for(Food j: menu_list.get(category)){
                 System.out.println(j);
             }
+            System.out.println();
         }
         else{
             System.out.println("Category doesnt exist!");
@@ -121,6 +124,7 @@ public class Menu {
             for(Food j: menu_list.get(i)){
                 if(j.name.contains(keyword)) System.out.println(j);
             }
+            System.out.println();
         }
     }
 
