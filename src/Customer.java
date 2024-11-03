@@ -6,7 +6,7 @@ public class Customer extends User{
     protected String user, pass;
     private boolean order_details_saved;
     private final ArrayList<Order> order_list;
-    private final LinkedHashSet<Food> food_list;
+    final LinkedHashSet<Food> food_list;
     public Order curr_order;
     public boolean vip;
     public Customer(ArrayList<String> cred){
