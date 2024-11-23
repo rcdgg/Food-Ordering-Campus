@@ -6,7 +6,7 @@ public class App {
     private static final Admin admin = new Admin();
     private static Customer customer = null;
     public static void main(String[] args) {
-
+        GUI gui = new GUI();
         while(true) run();
     }
     private static void run(){
@@ -85,6 +85,7 @@ public class App {
     private static void run_cust(){
         OUT:
         while(true){
+            customer.update_text();
             System.out.printf("===========Welcome, %s============\n", customer.user);
             if(customer.vip) System.out.println("(VIP)");
             System.out.println("Choose Action: ");

@@ -1,3 +1,5 @@
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.*;
 
 public class Menu {
@@ -30,6 +32,21 @@ public class Menu {
         return false;
     }
 
+    //update menu.txt file
+    private void update_text(){
+        try(PrintWriter w = new PrintWriter(new FileWriter("src/menu.txt"))){
+            for(String i: menu_list.keySet()){
+                w.printf("# %s:\n", i.toUpperCase());
+                for(Food j: menu_list.get(i)){
+                    w.println(j);
+                }
+                w.println();
+            }
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
     // MAKE SURE CATEGORY, NAME ARE IN LOWER CASE AND STRIPPED
     public void add(String category, String name, int price){
         menu_list.putIfAbsent(category, new ArrayList<>());
@@ -37,6 +54,7 @@ public class Menu {
             if(Objects.equals(f.name, name)) return; // in case the item already exists
         }
         menu_list.get(category).add(new Food(name, category, price));
+        update_text();
     }
 
     // returns true if update successful
@@ -83,6 +101,7 @@ public class Menu {
                 break;
             }
         }
+        update_text();
         return done;
     }
 

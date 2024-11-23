@@ -1,0 +1,7 @@
+rohan
+rohan
+--------
+Order ID: #0
+Order status: Pending
+Bill: 0rs
+--------

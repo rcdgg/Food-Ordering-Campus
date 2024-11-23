@@ -1,0 +1,14 @@
+# EGGS:
+boiled eggs        7rs
+omelette        20rs
+
+# DOSA:
+masala dosa        60rs
+
+# MAGGI:
+fried maggi        40rs
+
+# PARATHA:
+paneer paratha        30rs
+mooli paratha        30rs
+

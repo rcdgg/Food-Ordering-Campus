@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -18,6 +21,15 @@ public class Customer extends User{
         food_list = new LinkedHashSet<>(); // ordered set
         curr_order = null;
         vip = false; // need to buy vip
+        try{
+            File file = new File("users/" + user + ".txt");
+            try (PrintWriter writer = new PrintWriter(file)) {
+                writer.println(user);
+                writer.println(pass);
+            }
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public void become_vip(){
@@ -97,6 +109,7 @@ public class Customer extends User{
             break;
         }
         System.out.printf("%s added to the order!\n", food_items.get(ind - 1).name);
+        update_text();
     }
 
     /* remove or change count in order
@@ -146,6 +159,7 @@ public class Customer extends User{
             if (quan + curr_order.items.get(f) <= 0) f.order_list.remove(curr_order);
             curr_order.modify_item(f, quan);
         }
+        update_text();
     }
 
     public void view_total(){
@@ -196,6 +210,7 @@ public class Customer extends User{
         }
         System.out.printf("Order placed! (Order ID: %d)\n", curr_order.id);
         curr_order.status = 1;
+        update_text();
     }
 
     public void order_status_all(){
@@ -243,6 +258,7 @@ public class Customer extends User{
         }
         if(id == -1) return;
         t.cancel_order();
+        update_text();
     }
 
     public void order_history(){
@@ -267,6 +283,7 @@ public class Customer extends User{
         order_list.add(o);
         backend.add_order(o);
         System.out.println(o);
+        update_text();
     }
 
     public void view_reviews(){
@@ -304,5 +321,26 @@ public class Customer extends User{
         String rev = s.nextLine();
         temp.add_review(user, rev);
         System.out.println("Review added!");
+    }
+
+    //update pending orders txt file
+    public void update_text(){
+        try(PrintWriter w = new PrintWriter(new FileWriter("src/pending.txt"))) {
+            try (PrintWriter m = new PrintWriter(new FileWriter("users/" + user + ".txt"))) {
+                m.println(user);
+                m.println(pass);
+                ArrayList<String> temp;
+                for (Order i : order_list) {
+                    temp = i.billing();
+                    for (String c : temp) {
+                        w.println(c);
+                        m.println(c);
+                    }
+                }
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
     }
 }

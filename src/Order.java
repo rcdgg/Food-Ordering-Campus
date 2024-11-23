@@ -94,10 +94,11 @@ public class Order implements Comparable<Order>{
     }
 
     // returns true when order is valid
-    private void billing(){
+    public ArrayList<String> billing(){
         total = 0;
         if(status < 0) valid = false;
         ArrayList<String> bill = new ArrayList<>();
+        bill.add("--------");
         bill.add("Order ID: #" + id);
         bill.add(view_status());
         int ind = 1;
@@ -108,14 +109,15 @@ public class Order implements Comparable<Order>{
                 valid = false;
             }
         }
-        System.out.println("--------");
-        for(String s: bill) System.out.println(s);
-        System.out.println("Bill: " + total + "rs");
-        System.out.println("--------");
+        bill.add("Bill: " + total + "rs");
+        bill.add("--------");
+
+        return bill;
     }
 
     public void view_order(){
-        billing();
+        ArrayList<String> sss = billing();
+        for(String ss: sss) System.out.println(ss);
     }
 
     public String view_status(){
@@ -127,7 +129,8 @@ public class Order implements Comparable<Order>{
     public boolean checkout(){
         view_status();
         if(status == 0){
-            billing();
+            ArrayList<String> ss = billing();
+            for(String c: ss) System.out.println(c);
             if(!valid){
                 cancel_order();
             }

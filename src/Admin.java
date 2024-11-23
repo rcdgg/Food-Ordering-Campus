@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -183,6 +186,7 @@ public class Admin extends User{
                 }
             }
         }
+        o.cust.update_text();
     }
 
     public void sales_report(){
@@ -196,14 +200,40 @@ public class Admin extends User{
     }
 
     public Customer fetch_cust(ArrayList<String> cred) throws InvalidLoginException{
-        for(Customer c: Backend.customer_list){
-            if(c.user.equals(cred.get(0)) && c.pass.equals(cred.get(1))) return c;
+        try {
+            File file = new File("users/" + cred.get(0) + ".txt");
+            if(!file.createNewFile()){
+                for(Customer c: Backend.customer_list){
+                    if(c.user.equals(cred.get(0)) && c.pass.equals(cred.get(1))) return c;
+                }
+                return add_cust(cred);
+            } else {
+                if(file.delete()) throw new InvalidLoginException("Invalid login credentials!");
+            }
+        } catch (Exception _){
+
         }
         throw new InvalidLoginException("Invalid login credentials!");
     }
 
     public Customer add_cust(ArrayList<String> cred) throws InvalidLoginException{
-        backend.add_customer(cred);
+        try {
+            File file = new File("users/" + cred.get(0) + ".txt");
+            if(!file.createNewFile()){
+                String n, p;
+                try(BufferedReader r = new BufferedReader(new FileReader(file))){
+                    n = r.readLine();
+                    p = r.readLine();
+                }
+                if(!(n.equals(cred.get(0)) && p.equals(cred.get(1)))){
+                    throw new InvalidLoginException("Invalid login credentials!");
+                }
+            }
+            backend.add_customer(cred);
+
+        } catch (Exception _){
+            throw new InvalidLoginException("Invalid login credentials");
+        }
         return fetch_cust(cred);
     }
 }

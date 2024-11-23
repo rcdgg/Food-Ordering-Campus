@@ -1,0 +1,7 @@
+bk
+bk
+--------
+Order ID: #2
+Order status: Pending
+Bill: 0rs
+--------
