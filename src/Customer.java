@@ -231,7 +231,7 @@ public class Customer extends User{
     public void cancel_order(){
         //print all orders which have +ve status + not already delivered
         for(Order o: order_list){
-            if(o.status >= 0 && o.status != 3){ // can cancel all orders which havent been delivered or cancelled already
+            if(o.status >= 1 && o.status != 4){ // can cancel all orders which havent been delivered or cancelled already
                 o.view_order();
             }
         }
