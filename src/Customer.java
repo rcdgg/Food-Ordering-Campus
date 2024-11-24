@@ -1,6 +1,4 @@
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -23,9 +21,11 @@ public class Customer extends User{
         vip = false; // need to buy vip
         try{
             File file = new File("users/" + user + ".txt");
-            try (PrintWriter writer = new PrintWriter(file)) {
-                writer.println(user);
-                writer.println(pass);
+            if(file.createNewFile()) {
+                try (PrintWriter writer = new PrintWriter(file)) {
+                    writer.println(user);
+                    writer.println(pass);
+                }
             }
         } catch (Exception e){
             System.out.println(e.getMessage());
@@ -283,7 +283,6 @@ public class Customer extends User{
         order_list.add(o);
         backend.add_order(o);
         System.out.println(o);
-        update_text();
     }
 
     public void view_reviews(){
@@ -341,6 +340,20 @@ public class Customer extends User{
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
+    }
 
+    public void update_text_sign_in(){
+        try(PrintWriter w = new PrintWriter(new FileWriter("src/pending.txt"))) {
+            try (BufferedReader m = new BufferedReader(new FileReader("users/" + user + ".txt"))) {
+                m.readLine();
+                m.readLine();
+                String c;
+                while((c = m.readLine()) != null) {
+                    w.println(c);
+                }
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 }

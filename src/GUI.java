@@ -1,10 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.BufferedReader;
-import java.io.PrintWriter;
-import java.io.IOException;
 
 
 public class GUI{
@@ -15,25 +12,22 @@ public class GUI{
         frame = new JFrame();
         frame.setTitle("Byte Me!");
         frame.setSize(880,880);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         textArea = new JTextArea();
+        textArea.setFont(new Font("Helvetica", Font.PLAIN, 20));
         textArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(textArea);
-        scrollPane.setBounds(200,200,300,300);
+        scrollPane.setBounds(230,10,880 - 260,820);
 
         menu = new JButton("View menu");
-        menu.setBounds(100,100,100,100);
+        menu.setBounds(10,400,200,30);
 
         orders = new JButton("view pending orders");
-        orders.setBounds(0,0,100,100);
+        orders.setBounds(10,360,200,30);
 
-        menu.addActionListener(e -> {
-            read_menu();
-        });
+        menu.addActionListener(_ -> read_menu());
 
-        orders.addActionListener(e -> {
-            read_pending();
-        });
+        orders.addActionListener(_ -> read_pending());
 
         frame.add(menu);
         frame.add(orders);

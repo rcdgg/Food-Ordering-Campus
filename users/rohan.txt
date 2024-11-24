@@ -2,6 +2,17 @@ rohan
 rohan
 --------
 Order ID: #0
-Order status: Pending
-Bill: 0rs
+Order status: Waiting for confirmation
+1. paneer paratha (30 rs.)      x2
+
+2. boiled eggs (7 rs.)      x3
+
+Bill: 81rs
+--------
+--------
+Order ID: #3
+Order status: Cancelled (Refund in process)
+1. masala dosa (60 rs.)      x1
+
+Bill: 60rs
 --------

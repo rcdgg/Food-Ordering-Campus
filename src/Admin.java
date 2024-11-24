@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -227,6 +228,11 @@ public class Admin extends User{
                 }
                 if(!(n.equals(cred.get(0)) && p.equals(cred.get(1)))){
                     throw new InvalidLoginException("Invalid login credentials!");
+                }
+            } else {
+                try(PrintWriter w = new PrintWriter(file)){
+                    w.println(cred.get(0));
+                    w.println(cred.get(1));
                 }
             }
             backend.add_customer(cred);

@@ -6,7 +6,6 @@ public class App {
     private static final Admin admin = new Admin();
     private static Customer customer = null;
     public static void main(String[] args) {
-        GUI gui = new GUI();
         while(true) run();
     }
     private static void run(){
@@ -41,9 +40,7 @@ public class App {
     private static void run_sign_page(int mode){
         ArrayList<String> cred;
         switch (mode) {
-            case 1 -> {
-                App.run_admin();
-            }
+            case 1 -> App.run_admin();
             case 2 -> {
                 System.out.println("1. Sign in\n2. Sign up\n");
                 String act;
@@ -85,11 +82,11 @@ public class App {
     private static void run_cust(){
         OUT:
         while(true){
-            customer.update_text();
+            customer.update_text_sign_in();
             System.out.printf("===========Welcome, %s============\n", customer.user);
             if(customer.vip) System.out.println("(VIP)");
             System.out.println("Choose Action: ");
-            System.out.println("1. Browse menu\n2. Create new order\n3. Modify order\n4. Track/cancel order\n5. Checkout\n6. Become VIP\n7. Item reviews\n8. Exit");
+            System.out.println("1. Browse menu\n2. Create new order\n3. Modify order\n4. Track/cancel order\n5. Checkout\n6. Become VIP\n7. Item reviews\n8. GUI\n9. Exit");
             int action;
             while(true) {
                 try {
@@ -119,20 +116,14 @@ public class App {
                         break;
                     }
                     switch (action) {
-                        case 1 -> {
-                            customer.view_menu();
-                        }
-                        case 2 -> {
-                            customer.view_cat_menu();
-                        }
+                        case 1 -> customer.view_menu();
+                        case 2 -> customer.view_cat_menu();
                         case 3 -> {
                             System.out.print("Enter keyword: ");
                             String key = s.nextLine();
                             customer.view_key_menu(key);
                         }
-                        case 4 -> {
-                            customer.view_sortByPrice_menu();
-                        }
+                        case 4 -> customer.view_sortByPrice_menu();
                         case 5 -> System.out.println("Exiting.");
                         default -> System.out.println("Enter valid index!");
                     }
@@ -165,21 +156,11 @@ public class App {
                         break;
                     }
                     switch (action) {
-                        case 1 -> {
-                            customer.add_to_order();
-                        }
-                        case 2 -> {
-                            customer.modify_order(1);
-                        }
-                        case 3 -> {
-                            customer.modify_order(0);
-                        }
-                        case 4 -> {
-                            customer.view_total();
-                        }
-                        case 5 -> {
-                            System.out.println("Exiting.");
-                        }
+                        case 1 -> customer.add_to_order();
+                        case 2 -> customer.modify_order(1);
+                        case 3 -> customer.modify_order(0);
+                        case 4 -> customer.view_total();
+                        case 5 -> System.out.println("Exiting.");
                         default -> System.out.println("Enter valid index!");
                     }
 
@@ -203,21 +184,11 @@ public class App {
                         break;
                     }
                     switch (action) {
-                        case 1 -> {
-                            customer.order_status();
-                        }
-                        case 2 -> {
-                            customer.order_status_all();
-                        }
-                        case 3 -> {
-                            customer.cancel_order();
-                        }
-                        case 4 -> {
-                            customer.order_history();
-                        }
-                        case 5 -> {
-                            System.out.println("Exiting.");
-                        }
+                        case 1 -> customer.order_status();
+                        case 2 -> customer.order_status_all();
+                        case 3 -> customer.cancel_order();
+                        case 4 -> customer.order_history();
+                        case 5 -> System.out.println("Exiting.");
                         default -> System.out.println("Enter valid index!");
                     }
 
@@ -251,17 +222,14 @@ public class App {
                         break;
                     }
                     switch (action) {
-                        case 1 -> {
-                            customer.view_reviews();
-                        }
-                        case 2 -> {
-                            customer.add_review();
-                        }
+                        case 1 -> customer.view_reviews();
+                        case 2 -> customer.add_review();
                         case 3 -> System.out.println("Exiting.");
                         default -> System.out.println("Enter valid index!");
                     }
                 }
-                case 8 -> {
+                case 8 -> new GUI();
+                case 9 -> {
                     System.out.println("Logging out...");
                     break OUT;
                 }
@@ -305,19 +273,13 @@ public class App {
                         break;
                     }
                     switch (action) {
-                        case 1 -> {
-                            admin.add_menu();
-                        }
-                        case 2 -> {
-                            admin.update_menu();
-                        }
+                        case 1 -> admin.add_menu();
+                        case 2 -> admin.update_menu();
                         case 3 -> {
                             System.out.println("Make availability false to remove an item.");
                             admin.update_menu();
                         }
-                        case 4 -> {
-                            System.out.println("Exiting.");
-                        }
+                        case 4 -> System.out.println("Exiting.");
                         default -> System.out.println("Enter valid index!");
                     }
                     System.out.println("---------");
@@ -340,15 +302,9 @@ public class App {
                         break;
                     }
                     switch (action) {
-                        case 1 -> {
-                            admin.view_order_queue();
-                        }
-                        case 2 -> {
-                            admin.process_order();
-                        }
-                        case 3 -> {
-                            System.out.println("Exiting.");
-                        }
+                        case 1 -> admin.view_order_queue();
+                        case 2 -> admin.process_order();
+                        case 3 -> System.out.println("Exiting.");
                         default -> System.out.println("Enter valid index!");
                     }
                     System.out.println("---------");
