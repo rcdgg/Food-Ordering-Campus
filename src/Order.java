@@ -54,6 +54,7 @@ public class Order implements Comparable<Order>{
                 items.put(food, temp);
             } else { // adding new item
                 items.putIfAbsent(food, Integer.max(count, 0));
+                System.out.println("alo");
             }
             if (items.get(food) <= 0) { //removing the item if its count is 0
                 items.remove(food);

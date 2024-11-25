@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class App {
     private static final Scanner s = new Scanner(System.in);
-    private static final Admin admin = new Admin();
+    static final Admin admin = new Admin();
     private static Customer customer = null;
     public static void main(String[] args) {
         while(true) run();
