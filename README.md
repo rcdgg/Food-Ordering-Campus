@@ -37,3 +37,7 @@ Menu also initialised with few items from the get-go
 - can cancel all orders which havent been delivered or cancelled already
 - Admin doesnt require login
 - Once an order has been made invalid by removing an item off the menu, it cannot be made revalid again even if the item comes back
+- shows pending order of current customer signed in only(GUI SPECIFIC)
+
+## Testing Suite
+Run the tests in `mytest.java` to check beforehand whether everything is working properly or not
